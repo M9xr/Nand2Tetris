@@ -1,0 +1,65 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux16.hdl
+/**
+ * 16-bit multiplexor: 
+ * out[i] = ((sel == 0), a[i], b[i]) for i = 0..15
+ */
+CHIP Mux16 {
+    IN a[16], b[16], sel;
+    OUT out[16];
+
+    PARTS:
+    Nand (a=sel, b=sel, out=souta);
+    And (a=sel, b=sel, out=soutb);
+    
+    And (a=a[0], b=souta, out=souta20);
+    And (a=soutb, b=b[0], out=soutb20);
+    Or (a=souta20, b=soutb20, out=out[0]);
+ And (a=a[1], b=souta, out=souta21);
+    And (a=soutb, b=b[1], out=soutb21);
+    Or (a=souta21, b=soutb21, out=out[1]);
+ And (a=a[2], b=souta, out=souta22);
+    And (a=soutb, b=b[2], out=soutb22);
+    Or (a=souta22, b=soutb22, out=out[2]);
+ And (a=a[3], b=souta, out=souta23);
+    And (a=soutb, b=b[3], out=soutb23);
+    Or (a=souta23, b=soutb23, out=out[3]);
+ And (a=a[4], b=souta, out=souta24);
+    And (a=soutb, b=b[4], out=soutb24);
+    Or (a=souta24, b=soutb24, out=out[4]);
+ And (a=a[5], b=souta, out=souta25);
+    And (a=soutb, b=b[5], out=soutb25);
+    Or (a=souta25, b=soutb25, out=out[5]);
+ And (a=a[6], b=souta, out=souta26);
+    And (a=soutb, b=b[6], out=soutb26);
+    Or (a=souta26, b=soutb26, out=out[6]);
+ And (a=a[7], b=souta, out=souta27);
+    And (a=soutb, b=b[7], out=soutb27);
+    Or (a=souta27, b=soutb27, out=out[7]);
+ And (a=a[8], b=souta, out=souta28);
+    And (a=soutb, b=b[8], out=soutb28);
+    Or (a=souta28, b=soutb28, out=out[8]);
+ And (a=a[9], b=souta, out=souta29);
+    And (a=soutb, b=b[9], out=soutb29);
+    Or (a=souta29, b=soutb29, out=out[9]);
+ And (a=a[10], b=souta, out=souta210);
+    And (a=soutb, b=b[10], out=soutb210);
+    Or (a=souta210, b=soutb210, out=out[10]);
+ And (a=a[11], b=souta, out=souta211);
+    And (a=soutb, b=b[11], out=soutb211);
+    Or (a=souta211, b=soutb211, out=out[11]);
+ And (a=a[12], b=souta, out=souta212);
+    And (a=soutb, b=b[12], out=soutb212);
+    Or (a=souta212, b=soutb212, out=out[12]);
+ And (a=a[13], b=souta, out=souta213);
+    And (a=soutb, b=b[13], out=soutb213);
+    Or (a=souta213, b=soutb213, out=out[13]);
+ And (a=a[14], b=souta, out=souta214);
+    And (a=soutb, b=b[14], out=soutb214);
+    Or (a=souta214, b=soutb214, out=out[14]);
+ And (a=a[15], b=souta, out=souta215);
+    And (a=soutb, b=b[15], out=soutb215);
+    Or (a=souta215, b=soutb215, out=out[15]);
+}

@@ -1,0 +1,60 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/02/Inc16.hdl
+/**
+ * 16-bit incrementer:
+ * out = in + 1
+ */
+CHIP Inc16 {
+    IN in[16];
+    OUT out[16];
+
+    PARTS:
+    Not (in=in[0], out=out[0]);
+    Xor (a=in[0], b=in[1], out=out[1]);
+    And (a=in[0], b=in[1], out=andout1);
+
+    Xor (a=andout1, b=in[2], out=out[2]);
+    And (a=andout1, b=in[2], out=andout2);
+    
+    Xor (a=andout2, b=in[3], out=out[3]);
+    And (a=andout2, b=in[3], out=andout3);
+
+    Xor (a=andout3, b=in[4], out=out[4]);
+    And (a=andout3, b=in[4], out=andout4);
+    
+    Xor (a=andout4, b=in[5], out=out[5]);
+    And (a=andout4, b=in[5], out=andout5);
+    
+    Xor (a=andout5, b=in[6], out=out[6]);
+    And (a=andout5, b=in[6], out=andout6);
+    
+    Xor (a=andout6, b=in[7], out=out[7]);
+    And (a=andout6, b=in[7], out=andout7);
+    
+    Xor (a=andout7, b=in[8], out=out[8]);
+    And (a=andout7, b=in[8], out=andout8);
+    
+    Xor (a=andout8, b=in[9], out=out[9]);
+    And (a=andout8, b=in[9], out=andout9);
+
+    Xor (a=andout9, b=in[10], out=out[10]);
+    And (a=andout9, b=in[10], out=andout10);
+    
+    Xor (a=andout10, b=in[11], out=out[11]);
+    And (a=andout10, b=in[11], out=andout11);
+    
+    Xor (a=andout11, b=in[12], out=out[12]);
+    And (a=andout11, b=in[12], out=andout12);
+    
+    Xor (a=andout12, b=in[12], out=out[13]);
+    And (a=andout12, b=in[12], out=andout13);
+    
+    Xor (a=andout13, b=in[13], out=out[14]);
+    And (a=andout13, b=in[13], out=andout14);
+    
+    Xor (a=andout14, b=in[14], out=out[15]);
+
+    //// Replace this comment with your code.
+}

@@ -1,0 +1,95 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux8Way.hdl
+/**
+ * 8-way demultiplexor:
+ * [a, b, c, d, e, f, g, h] = [in, 0, 0, 0, 0, 0, 0, 0] if sel == 000
+ *                            [0, in, 0, 0, 0, 0, 0, 0] if sel == 001
+ *                            ...
+ *                            [0, 0, 0, 0, 0, 0, 0, in] if sel == 111
+ */
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+
+    Or (a=sel[0], b=sel[1], out=or1out);
+    Or (a=sel[2], b=or1out, out=or2out);
+    Not (in=or2out, out=not1out);
+    And (a=in, b=not1out, out=a);
+
+    Or (a=sel[1], b=sel[2], out=or3out);
+    Not (in=or3out, out=not2out);
+    And (a=sel[0], b=not2out, out=xand1out);
+    And (a=in, b=xand1out, out=b);
+
+    Or (a=sel[0], b=sel[2], out=or4out);
+    Not (in=or4out, out=not3out);
+    And (a=sel[1], b=not3out, out=xand2out);
+    And (a=in, b=xand2out, out=c);
+    
+    And (a=sel[0], b=sel[1], out=and1out);
+    Not (in=sel[2], out=not4out);
+    And (a=and1out, b=not4out, out=xand3out);
+    And (a=in, b=xand3out, out=d);
+
+    Or (a=sel[0], b=sel[1], out=or5out);
+    Not (in=or5out, out=not5out);
+    And (a=sel[2], b=not5out, out=xand4out);
+    And (a=in, b=xand4out, out=e);
+
+    And (a=sel[0], b=sel[2], out=and2out);
+    Not (in=sel[1], out=not6out);
+    And (a=and2out, b=not6out, out=xand5out);
+    And (a=in, b=xand5out, out=f);
+
+    And (a=sel[1], b=sel[2], out=and3out);
+    Not (in=sel[0], out=not7out);
+    And (a=and3out, b=not7out, out=xand6out);
+    And (a=in, b=xand6out, out=g);
+
+    And (a=sel[0], b=sel[1], out=and4out);
+    And (a=sel[2], b=and4out, out=xand7out);
+    And (a=in, b=xand7out, out=h);
+
+
+    /*
+    Or (a=sel[0], b=sel[1], out=nand1out);
+    Not (in=sel[2], out=not1out);
+    And (a=nand1out, b=not1out, out=xand1out);
+    And (a=in, b=xand1out, out=a);
+
+    Nand (a=sel[1], b=sel[2], out=nand2out);
+    And (a=nand2out, b=sel[0], out=xand2out);
+    And (a=in, b=xand2out, out=b);
+
+    Nand (a=sel[0], b=sel[2], out=nand3out);
+    And (a=nand3out, b=sel[1], out=xand3out);
+    And (a=in, b=xand3out, out=c);
+
+    And (a=sel[0], b=sel[1], out=and1out);
+    Not (in=sel[2], out=not2out);
+    And (a=and1out, b=not2out, out=xand4out);
+    And (a=in, b=xand4out, out=d);
+
+    Nand (a=sel[0], b=sel[1], out=nand4out);
+    And (a=sel[2], b=nand4out, out=xand5out);
+    And (a=in, b=xand5out, out=e);
+
+    And (a=sel[0], b=sel[2], out=and2out);
+    Not (in=sel[1], out=not3out);
+    And (a=and2out, b=not3out, out=xand6out);
+    And (a=in, b=xand6out, out=f);
+    
+    And (a=sel[1], b=sel[2], out=and3out);
+    Not (in=sel[0], out=not4out);
+    And (a=and3out, b=not4out, out=xand7out);
+    And (a=in, b=xand7out, out=g);
+    
+    And (a=sel[0], b=sel[1], out=and4out);
+    And (a=sel[2], b=and4out, out=xand8out);
+    And (a=in, b=xand8out, out=h); 
+    */
+}

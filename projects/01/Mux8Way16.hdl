@@ -1,0 +1,384 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux8Way16.hdl
+/**
+ * 8-way 16-bit multiplexor:
+ * out = a if sel == 000
+ *       b if sel == 001
+ *       ...
+ *       h if sel == 111
+ */
+CHIP Mux8Way16 {
+    IN a[16], b[16], c[16], d[16],
+       e[16], f[16], g[16], h[16],
+       sel[3];
+    OUT out[16];
+
+    PARTS:
+    /* xAnd1 */
+    Or (a=sel[0], b=sel[1], out=or1out);
+    Not (in=or1out, out=not1out);
+    Not (in=sel[2], out=not2out);
+    And (a=not1out, b=not2out, out=xand1out);    
+	
+    /* xAnd2 */
+   Or (a=sel[1], b=sel[2], out=or2out);
+   Not (in=or2out, out=not3out);
+   And (a=sel[0], b=not3out, out=xand2out);
+
+   /* xAnd3 */
+   Or (a=sel[0], b=sel[2], out=or3out);
+   Not (in=or3out, out=not4out);
+   And (a=sel[1], b=not4out, out=xand3out);
+
+   /* xAnd4 */
+   And (a=sel[0], b=sel[1], out=yand1);
+   Not (in=sel[2], out=not5out);
+   And (a=yand1, b=not5out, out=xand4out);
+
+   /* xAnd5 */
+   Or (a=sel[0], b=sel[1], out=or4out);
+   Not (in=or4out, out=not6out);
+   And (a=sel[2], b=not6out, out=xand5out);
+
+   /* xAnd6 */
+   And (a=sel[0], b=sel[2], out=yand2);
+   Not (in=sel[1], out=out7out);
+   And (a=out7out, b=yand2, out=xand6out);
+
+   /* xAnd7 */
+   And (a=sel[1], b=sel[2], out=yand3);
+   Not (in=sel[0], out=out8out);
+   And (a=out8out, b=yand3, out=xand7out);
+
+   /* xAnd8 */
+   And (a=sel[0], b=sel[1], out=yand4);
+   And (a=yand4, b=sel[2], out=xand8out);
+
+  /* Repeat the lines below 16 times */
+   /* zAnds part */
+   And (a=xand1out, b=a[0], out=zandout1);
+   And (a=xand2out, b=b[0], out=zandout2);
+   And (a=xand3out, b=c[0], out=zandout3);
+   And (a=xand4out, b=d[0], out=zandout4);
+   And (a=xand5out, b=e[0], out=zandout5);
+   And (a=xand6out, b=f[0], out=zandout6);
+   And (a=xand7out, b=g[0], out=zandout7);
+   And (a=xand8out, b=h[0], out=zandout8);
+
+   /* Ors part */
+   Or (a=zandout1, b=zandout2, out=zorout1);
+   Or (a=zandout3, b=zandout4, out=zorout2);
+   Or (a=zandout5, b=zandout6, out=zorout3);
+   Or (a=zandout7, b=zandout8, out=zorout4);
+
+   Or (a=zorout1, b=zorout2, out=zorout5);
+   Or (a=zorout3, b=zorout4, out=zorout6);
+
+   Or (a=zorout5, b=zorout6, out=out[0]);
+
+
+
+   /* End of repeating */
+And (a=xand1out, b=a[1], out=zandout11);
+   And (a=xand2out, b=b[1], out=zandout21);
+   And (a=xand3out, b=c[1], out=zandout31);
+   And (a=xand4out, b=d[1], out=zandout41);
+   And (a=xand5out, b=e[1], out=zandout51);
+   And (a=xand6out, b=f[1], out=zandout61);
+   And (a=xand7out, b=g[1], out=zandout71);
+   And (a=xand8out, b=h[1], out=zandout81);
+
+   /* Ors part */
+   Or (a=zandout11, b=zandout21, out=zorout11);
+   Or (a=zandout31, b=zandout41, out=zorout21);
+   Or (a=zandout51, b=zandout61, out=zorout31);
+   Or (a=zandout71, b=zandout81, out=zorout41);
+
+   Or (a=zorout11, b=zorout21, out=zorout51);
+   Or (a=zorout31, b=zorout41, out=zorout61);
+
+   Or (a=zorout51, b=zorout61, out=out[1]);
+
+And (a=xand1out, b=a[2], out=zandout12);
+   And (a=xand2out, b=b[2], out=zandout22);
+   And (a=xand3out, b=c[2], out=zandout32);
+   And (a=xand4out, b=d[2], out=zandout42);
+   And (a=xand5out, b=e[2], out=zandout52);
+   And (a=xand6out, b=f[2], out=zandout62);
+   And (a=xand7out, b=g[2], out=zandout72);
+   And (a=xand8out, b=h[2], out=zandout82);
+
+   /* Ors part */
+   Or (a=zandout12, b=zandout22, out=zorout12);
+   Or (a=zandout32, b=zandout42, out=zorout22);
+   Or (a=zandout52, b=zandout62, out=zorout32);
+   Or (a=zandout72, b=zandout82, out=zorout42);
+
+   Or (a=zorout12, b=zorout22, out=zorout52);
+   Or (a=zorout32, b=zorout42, out=zorout62);
+
+   Or (a=zorout52, b=zorout62, out=out[2]);
+
+And (a=xand1out, b=a[3], out=zandout13);
+   And (a=xand2out, b=b[3], out=zandout23);
+   And (a=xand3out, b=c[3], out=zandout33);
+   And (a=xand4out, b=d[3], out=zandout43);
+   And (a=xand5out, b=e[3], out=zandout53);
+   And (a=xand6out, b=f[3], out=zandout63);
+   And (a=xand7out, b=g[3], out=zandout73);
+   And (a=xand8out, b=h[3], out=zandout83);
+
+   /* Ors part */
+   Or (a=zandout13, b=zandout23, out=zorout13);
+   Or (a=zandout33, b=zandout43, out=zorout23);
+   Or (a=zandout53, b=zandout63, out=zorout33);
+   Or (a=zandout73, b=zandout83, out=zorout43);
+
+   Or (a=zorout13, b=zorout23, out=zorout53);
+   Or (a=zorout33, b=zorout43, out=zorout63);
+
+   Or (a=zorout53, b=zorout63, out=out[3]);
+
+And (a=xand1out, b=a[4], out=zandout14);
+   And (a=xand2out, b=b[4], out=zandout24);
+   And (a=xand3out, b=c[4], out=zandout34);
+   And (a=xand4out, b=d[4], out=zandout44);
+   And (a=xand5out, b=e[4], out=zandout54);
+   And (a=xand6out, b=f[4], out=zandout64);
+   And (a=xand7out, b=g[4], out=zandout74);
+   And (a=xand8out, b=h[4], out=zandout84);
+
+   /* Ors part */
+   Or (a=zandout14, b=zandout24, out=zorout14);
+   Or (a=zandout34, b=zandout44, out=zorout24);
+   Or (a=zandout54, b=zandout64, out=zorout34);
+   Or (a=zandout74, b=zandout84, out=zorout44);
+
+   Or (a=zorout14, b=zorout24, out=zorout54);
+   Or (a=zorout34, b=zorout44, out=zorout64);
+
+   Or (a=zorout54, b=zorout64, out=out[4]);
+
+And (a=xand1out, b=a[5], out=zandout15);
+   And (a=xand2out, b=b[5], out=zandout25);
+   And (a=xand3out, b=c[5], out=zandout35);
+   And (a=xand4out, b=d[5], out=zandout45);
+   And (a=xand5out, b=e[5], out=zandout55);
+   And (a=xand6out, b=f[5], out=zandout65);
+   And (a=xand7out, b=g[5], out=zandout75);
+   And (a=xand8out, b=h[5], out=zandout85);
+
+   /* Ors part */
+   Or (a=zandout15, b=zandout25, out=zorout15);
+   Or (a=zandout35, b=zandout45, out=zorout25);
+   Or (a=zandout55, b=zandout65, out=zorout35);
+   Or (a=zandout75, b=zandout85, out=zorout45);
+
+   Or (a=zorout15, b=zorout25, out=zorout55);
+   Or (a=zorout35, b=zorout45, out=zorout65);
+
+   Or (a=zorout55, b=zorout65, out=out[5]);
+
+And (a=xand1out, b=a[6], out=zandout16);
+   And (a=xand2out, b=b[6], out=zandout26);
+   And (a=xand3out, b=c[6], out=zandout36);
+   And (a=xand4out, b=d[6], out=zandout46);
+   And (a=xand5out, b=e[6], out=zandout56);
+   And (a=xand6out, b=f[6], out=zandout66);
+   And (a=xand7out, b=g[6], out=zandout76);
+   And (a=xand8out, b=h[6], out=zandout86);
+
+   /* Ors part */
+   Or (a=zandout16, b=zandout26, out=zorout16);
+   Or (a=zandout36, b=zandout46, out=zorout26);
+   Or (a=zandout56, b=zandout66, out=zorout36);
+   Or (a=zandout76, b=zandout86, out=zorout46);
+
+   Or (a=zorout16, b=zorout26, out=zorout56);
+   Or (a=zorout36, b=zorout46, out=zorout66);
+
+   Or (a=zorout56, b=zorout66, out=out[6]);
+
+And (a=xand1out, b=a[7], out=zandout17);
+   And (a=xand2out, b=b[7], out=zandout27);
+   And (a=xand3out, b=c[7], out=zandout37);
+   And (a=xand4out, b=d[7], out=zandout47);
+   And (a=xand5out, b=e[7], out=zandout57);
+   And (a=xand6out, b=f[7], out=zandout67);
+   And (a=xand7out, b=g[7], out=zandout77);
+   And (a=xand8out, b=h[7], out=zandout87);
+
+   /* Ors part */
+   Or (a=zandout17, b=zandout27, out=zorout17);
+   Or (a=zandout37, b=zandout47, out=zorout27);
+   Or (a=zandout57, b=zandout67, out=zorout37);
+   Or (a=zandout77, b=zandout87, out=zorout47);
+
+   Or (a=zorout17, b=zorout27, out=zorout57);
+   Or (a=zorout37, b=zorout47, out=zorout67);
+
+   Or (a=zorout57, b=zorout67, out=out[7]);
+
+And (a=xand1out, b=a[8], out=zandout18);
+   And (a=xand2out, b=b[8], out=zandout28);
+   And (a=xand3out, b=c[8], out=zandout38);
+   And (a=xand4out, b=d[8], out=zandout48);
+   And (a=xand5out, b=e[8], out=zandout58);
+   And (a=xand6out, b=f[8], out=zandout68);
+   And (a=xand7out, b=g[8], out=zandout78);
+   And (a=xand8out, b=h[8], out=zandout88);
+
+   /* Ors part */
+   Or (a=zandout18, b=zandout28, out=zorout18);
+   Or (a=zandout38, b=zandout48, out=zorout28);
+   Or (a=zandout58, b=zandout68, out=zorout38);
+   Or (a=zandout78, b=zandout88, out=zorout48);
+
+   Or (a=zorout18, b=zorout28, out=zorout58);
+   Or (a=zorout38, b=zorout48, out=zorout68);
+
+   Or (a=zorout58, b=zorout68, out=out[8]);
+
+And (a=xand1out, b=a[9], out=zandout19);
+   And (a=xand2out, b=b[9], out=zandout29);
+   And (a=xand3out, b=c[9], out=zandout39);
+   And (a=xand4out, b=d[9], out=zandout49);
+   And (a=xand5out, b=e[9], out=zandout59);
+   And (a=xand6out, b=f[9], out=zandout69);
+   And (a=xand7out, b=g[9], out=zandout79);
+   And (a=xand8out, b=h[9], out=zandout89);
+
+   /* Ors part */
+   Or (a=zandout19, b=zandout29, out=zorout19);
+   Or (a=zandout39, b=zandout49, out=zorout29);
+   Or (a=zandout59, b=zandout69, out=zorout39);
+   Or (a=zandout79, b=zandout89, out=zorout49);
+
+   Or (a=zorout19, b=zorout29, out=zorout59);
+   Or (a=zorout39, b=zorout49, out=zorout69);
+
+   Or (a=zorout59, b=zorout69, out=out[9]);
+
+And (a=xand1out, b=a[10], out=zandout110);
+   And (a=xand2out, b=b[10], out=zandout210);
+   And (a=xand3out, b=c[10], out=zandout310);
+   And (a=xand4out, b=d[10], out=zandout410);
+   And (a=xand5out, b=e[10], out=zandout510);
+   And (a=xand6out, b=f[10], out=zandout610);
+   And (a=xand7out, b=g[10], out=zandout710);
+   And (a=xand8out, b=h[10], out=zandout810);
+
+   /* Ors part */
+   Or (a=zandout110, b=zandout210, out=zorout110);
+   Or (a=zandout310, b=zandout410, out=zorout210);
+   Or (a=zandout510, b=zandout610, out=zorout310);
+   Or (a=zandout710, b=zandout810, out=zorout410);
+
+   Or (a=zorout110, b=zorout210, out=zorout510);
+   Or (a=zorout310, b=zorout410, out=zorout610);
+
+   Or (a=zorout510, b=zorout610, out=out[10]);
+
+And (a=xand1out, b=a[11], out=zandout111);
+   And (a=xand2out, b=b[11], out=zandout211);
+   And (a=xand3out, b=c[11], out=zandout311);
+   And (a=xand4out, b=d[11], out=zandout411);
+   And (a=xand5out, b=e[11], out=zandout511);
+   And (a=xand6out, b=f[11], out=zandout611);
+   And (a=xand7out, b=g[11], out=zandout711);
+   And (a=xand8out, b=h[11], out=zandout811);
+
+   /* Ors part */
+   Or (a=zandout111, b=zandout211, out=zorout111);
+   Or (a=zandout311, b=zandout411, out=zorout211);
+   Or (a=zandout511, b=zandout611, out=zorout311);
+   Or (a=zandout711, b=zandout811, out=zorout411);
+
+   Or (a=zorout111, b=zorout211, out=zorout511);
+   Or (a=zorout311, b=zorout411, out=zorout611);
+
+   Or (a=zorout511, b=zorout611, out=out[11]);
+
+And (a=xand1out, b=a[12], out=zandout112);
+   And (a=xand2out, b=b[12], out=zandout212);
+   And (a=xand3out, b=c[12], out=zandout312);
+   And (a=xand4out, b=d[12], out=zandout412);
+   And (a=xand5out, b=e[12], out=zandout512);
+   And (a=xand6out, b=f[12], out=zandout612);
+   And (a=xand7out, b=g[12], out=zandout712);
+   And (a=xand8out, b=h[12], out=zandout812);
+
+   /* Ors part */
+   Or (a=zandout112, b=zandout212, out=zorout112);
+   Or (a=zandout312, b=zandout412, out=zorout212);
+   Or (a=zandout512, b=zandout612, out=zorout312);
+   Or (a=zandout712, b=zandout812, out=zorout412);
+
+   Or (a=zorout112, b=zorout212, out=zorout512);
+   Or (a=zorout312, b=zorout412, out=zorout612);
+
+   Or (a=zorout512, b=zorout612, out=out[12]);
+
+And (a=xand1out, b=a[13], out=zandout113);
+   And (a=xand2out, b=b[13], out=zandout213);
+   And (a=xand3out, b=c[13], out=zandout313);
+   And (a=xand4out, b=d[13], out=zandout413);
+   And (a=xand5out, b=e[13], out=zandout513);
+   And (a=xand6out, b=f[13], out=zandout613);
+   And (a=xand7out, b=g[13], out=zandout713);
+   And (a=xand8out, b=h[13], out=zandout813);
+
+   /* Ors part */
+   Or (a=zandout113, b=zandout213, out=zorout113);
+   Or (a=zandout313, b=zandout413, out=zorout213);
+   Or (a=zandout513, b=zandout613, out=zorout313);
+   Or (a=zandout713, b=zandout813, out=zorout413);
+
+   Or (a=zorout113, b=zorout213, out=zorout513);
+   Or (a=zorout313, b=zorout413, out=zorout613);
+
+   Or (a=zorout513, b=zorout613, out=out[13]);
+
+And (a=xand1out, b=a[14], out=zandout114);
+   And (a=xand2out, b=b[14], out=zandout214);
+   And (a=xand3out, b=c[14], out=zandout314);
+   And (a=xand4out, b=d[14], out=zandout414);
+   And (a=xand5out, b=e[14], out=zandout514);
+   And (a=xand6out, b=f[14], out=zandout614);
+   And (a=xand7out, b=g[14], out=zandout714);
+   And (a=xand8out, b=h[14], out=zandout814);
+
+   /* Ors part */
+   Or (a=zandout114, b=zandout214, out=zorout114);
+   Or (a=zandout314, b=zandout414, out=zorout214);
+   Or (a=zandout514, b=zandout614, out=zorout314);
+   Or (a=zandout714, b=zandout814, out=zorout414);
+
+   Or (a=zorout114, b=zorout214, out=zorout514);
+   Or (a=zorout314, b=zorout414, out=zorout614);
+
+   Or (a=zorout514, b=zorout614, out=out[14]);
+
+And (a=xand1out, b=a[15], out=zandout115);
+   And (a=xand2out, b=b[15], out=zandout215);
+   And (a=xand3out, b=c[15], out=zandout315);
+   And (a=xand4out, b=d[15], out=zandout415);
+   And (a=xand5out, b=e[15], out=zandout515);
+   And (a=xand6out, b=f[15], out=zandout615);
+   And (a=xand7out, b=g[15], out=zandout715);
+   And (a=xand8out, b=h[15], out=zandout815);
+
+   /* Ors part */
+   Or (a=zandout115, b=zandout215, out=zorout115);
+   Or (a=zandout315, b=zandout415, out=zorout215);
+   Or (a=zandout515, b=zandout615, out=zorout315);
+   Or (a=zandout715, b=zandout815, out=zorout415);
+
+   Or (a=zorout115, b=zorout215, out=zorout515);
+   Or (a=zorout315, b=zorout415, out=zorout615);
+
+   Or (a=zorout515, b=zorout615, out=out[15]);
+
+}
